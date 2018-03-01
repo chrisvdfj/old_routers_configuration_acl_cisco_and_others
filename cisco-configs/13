@@ -1,0 +1,78 @@
+
+!
+version 12.0
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname gw-ri
+!
+enable secret 5 $1$GxtO$l2auzOrGtTaZeHbGlY04./
+enable password connet99
+!
+ip subnet-zero
+ip name-server 206.48.128.133
+!
+!
+!
+!
+interface Ethernet0
+ description Conexion a Red Interna de Usuarios Unete.com
+ bandwidth 10000
+ ip address 206.48.143.129 255.255.255.128
+ ip directed-broadcast
+!
+interface Ethernet1
+ description Conexion a Red Externa de Unete.com
+ bandwidth 10000
+ ip address 206.48.128.13 255.255.255.0
+ ip directed-broadcast
+!
+router ospf 10502
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 206.48.128.12
+ip route 206.48.143.128 255.255.255.128 Ethernet0
+no ip http server
+!
+logging 209.198.213.2
+access-list 110 deny   ip 206.48.143.128 0.0.0.127 any
+access-list 110 deny   ip any host 206.48.143.130
+access-list 110 permit icmp any any
+access-list 110 permit udp any 206.48.143.128 0.0.0.127 eq domain
+access-list 110 permit tcp any 206.48.143.128 0.0.0.127 eq domain
+access-list 110 permit tcp any 206.48.143.128 0.0.0.127 eq www
+access-list 110 permit tcp any 206.48.143.128 0.0.0.127 eq ftp-data
+access-list 110 permit tcp any 206.48.143.128 0.0.0.127 eq ftp
+access-list 110 permit tcp any 206.48.143.128 0.0.0.127 eq smtp
+access-list 110 permit tcp any 206.48.143.128 0.0.0.127 eq pop3
+access-list 110 permit tcp any 206.48.143.128 0.0.0.127 eq nntp
+access-list 110 permit tcp any 206.48.143.128 0.0.0.127 eq 9999
+access-list 110 deny   tcp any 206.48.143.128 0.0.0.127 eq 6667
+access-list 110 deny   udp any 206.48.143.128 0.0.0.127 eq 6667
+access-list 110 permit tcp any 206.48.143.128 0.0.0.127 gt 1023 established
+access-list 110 deny   udp any 206.48.143.128 0.0.0.127 eq 1433
+access-list 110 deny   udp any 206.48.143.128 0.0.0.127 eq 1645
+access-list 110 deny   udp any 206.48.143.128 0.0.0.127 eq 1646
+access-list 110 permit udp any 206.48.143.128 0.0.0.127 gt 1023
+access-list 110 deny   ip any 206.48.143.128 0.0.0.127
+access-list 120 deny   ip 206.48.143.128 0.0.0.127 any
+access-list 120 deny   tcp any any eq 6665
+access-list 120 deny   tcp any any eq 6666
+access-list 120 deny   tcp any any eq 6667
+access-list 120 deny   tcp any any eq 6668
+access-list 120 deny   tcp any any eq 6669
+access-list 120 permit ip any any
+access-list 120 permit icmp any any
+dialer-list 1 protocol ip permit
+snmp-server community public RO
+snmp-server location Apoquindo 300 of 602, Las Condes, Santiago - Chile
+snmp-server contact Operaciones - Unete.com Chile - (56 2) 374 4500
+!
+line con 0
+ transport input none
+line vty 0 4
+ password connet99
+ login
+!
+end

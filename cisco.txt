@@ -1,0 +1,136 @@
+acc 101 deny ip 192.168.168.0 0.0.0.255 0.0.0.0 255.255.255.255
+acc 101 permit tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 establ
+ished
+acc 101 deny tcp xxx.xxx.xxx.xxx 0.0.0.0 xxx.xxx.xxx.xxx 0.0.0.0
+[this needs to be done for each of your interfaces where xxx.xxx.xxx.xxx is
+ the ip address of the eth or serial interface]
+
+   here I block or allow certain well-known services:
+   
+! ftp data to ftp server only
+acc 101 permit tcp 0.0.0.0 255.255.255.255 your.ftp.ser.ver 0.0.0.0 eq 20
+! ftp commands to ftp server only
+acc 101 permit tcp 0.0.0.0 255.255.255.255 your.ftp.ser.ver 0.0.0.0 eq 21
+! sshd to sshd server only
+acc 101 permit tcp 0.0.0.0 255.255.255.255 your.sshd.ser.ver 0.0.0.0 eq 22
+! telnet to telnet server only
+acc 101 permit tcp 0.0.0.0 255.255.255.255 your.telnet.ser.ver 0.0.0.0 eq 23
+! smtp to mail server only
+acc 101 permit tcp 0.0.0.0 255.255.255.255 your.mail.ser.ver 0.0.0.0 eq 25
+! Time service
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 37
+! tacacs
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 49
+! dns to name server only
+acc 101 permit tcp 0.0.0.0 255.255.255.255 your.dns.ser.ver 0.0.0.0 eq 53
+acc 101 permit udp 0.0.0.0 255.255.255.255 your.dns.ser.ver 0.0.0.0 eq 53
+! Bootp
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 67
+! tftp
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 69
+! gopher
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 70
+! finger to finger server only
+acc 101 permit tcp 0.0.0.0 255.255.255.255 your.finger.ser.ver 0.0.0.0 eq 79
+! httpd to web server(s) only
+acc 101 permit tcp 0.0.0.0 255.255.255.255 your.web.ser.ver 0.0.0.0 eq 80
+acc 101 permit udp 0.0.0.0 255.255.255.255 your.web.ser.ver 0.0.0.0 eq 80
+! link
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 87
+! pop3d (right now pop email is only through dialup)
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 110
+! rpc
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 111
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 111
+! nntp
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 119
+! ntp
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 123
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 123
+! NeWS
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 144
+! snmp
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 161
+! snmp (traps)
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 162
+! bgp
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 179
+! irc
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 194
+! listserv (until needed)
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 372
+! other r commands
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 512
+! rlogin
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 513
+! rexec
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 514
+! lpd
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 515
+! talk
+acc 101 permit tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 517
+acc 101 permit udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 517
+! routed (no one should be getting routing info from me)
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 520
+! uucp
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 540
+! outbound ssh needs port 1022 or 1023
+acc 101 permit tcp 0.0.0.0 255.255.255.255 clients.need.ing.ssh 0.0.0.0 eq 1022
+acc 101 permit tcp 0.0.0.0 255.255.255.255 clients.need.ing.ssh 0.0.0.0 eq 1023
+! ftp auxiliary ports
+acc 101 permit tcp 0.0.0.0 255.255.255.255 your.ftp.ser.ver 0.0.0.0 gt 1023
+! Open Windows
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 2000
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 2000
+! x11
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 2001
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 2002
+! nfs
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 2049
+! x11
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 6000
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 6000
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 6001
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 6001
+acc 101 deny tcp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 6002
+acc 101 deny udp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255 eq 6002
+! icmp
+acc 101 permit icmp 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255
+
+   All access not specifically permitted above, is denied:
+   
+! all other access
+acc 101 deny ip 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255
+
+   That was similar to my incoming access list.
+   
+   This is my access list for outgoing traffic. Here I make sure that any
+   packet leaving my net has a source address from my net. This will
+   prevent people from sending spoofed packets via my net.
+   
+!
+no acc 102
+! filter outgoing packets without your source address
+acc 102 permit ip your.net.ip.0 0.0.0.255 0.0.0.0 255.255.255.255
+acc 102 deny ip 0.0.0.0 255.255.255.255 0.0.0.0 255.255.255.255
+
+   this activates the access lists:
+   
+int s0
+ip access 101 in
+ip access 102 out
+no ip source-route
+
+   the no ip source-route line is recommended by Cisco to help prevent
+   other forms of spoofing.
+   
+   Also note that if you have Cisco IOS 10.3 or later then you can
+   replace any instance of 0.0.0.0 255.255.255.255 with the keyword any.
+   You can see a list of denied packets with the command sh ip acc acc
+   (at least on certain versions of IOS).
+   
+   Finally, don't use this access list as is. Be sure to alter it for
+   your network.
+   
+   
+    Last modified

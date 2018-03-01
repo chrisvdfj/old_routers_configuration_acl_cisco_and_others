@@ -1,0 +1,72 @@
+
+!
+version 11.1
+service udp-small-servers
+service tcp-small-servers
+!
+hostname GIP-Nacional
+!
+enable secret 5 $1$uuve$aWiFlIAHNP5H04GCOqCAz.
+enable password connet99
+!
+ip subnet-zero
+!
+interface Ethernet0
+ description Conexion a Backbone
+ ip address 206.48.128.12 255.255.255.0
+ ip route-cache same-interface
+ bandwidth 10000
+!
+interface Serial0
+ description GIP-Nacional
+ ip address 206.49.216.110 255.255.255.252
+ ip access-group 3 out
+ no ip directed-broadcast
+ no ip mroute-cache
+ bandwidth 512
+!
+interface Serial1
+ ip address 206.49.216.50 255.255.255.252
+ no ip unreachables
+ shutdown
+!
+router ospf 10502
+ redistribute connected subnets
+ redistribute static subnets
+ passive-interface Serial0
+ passive-interface Serial1
+ network 206.48.128.0 0.0.31.255 area 0.0.0.0
+ network 216.241.0.0 0.0.15.255 area 0.0.0.0
+ network 209.198.213.0 0.0.0.255 area 0.0.0.0
+!
+ip name-server 206.48.128.133
+ip classless
+ip route 0.0.0.0 0.0.0.0 206.49.216.109
+ip route 196.40.18.0 255.255.255.0 206.48.128.18
+ip route 209.198.213.0 255.255.255.0 206.48.128.1
+logging 209.198.213.2
+access-list 3 deny   206.48.133.0 0.0.0.255
+access-list 3 permit 206.48.128.0 0.0.31.255
+access-list 3 permit 216.241.0.0 0.0.15.255
+access-list 3 permit 209.198.213.0 0.0.0.255
+access-list 3 permit 206.103.4.0 0.0.0.255
+access-list 3 permit 208.141.103.0 0.0.0.255
+access-list 3 deny   any
+snmp-server community public RO
+snmp-server location Santa Elena 2222 - San Joaquin - Santiago - Chile
+snmp-server contact Operaciones Unete.com S.A. - Fono: 3744570  
+!
+line con 0
+ password 7 044F190F1924425A06
+line aux 0
+ password 7 044F190F1924425A06
+ transport input all
+line vty 0
+ password connet99
+ login
+ width 81
+line vty 1 4
+ password connet99
+ login
+!
+end

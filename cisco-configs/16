@@ -1,0 +1,349 @@
+Startup configuration:
+!
+ver 05.2.01T43
+module 1 bi-4-port-gig-management-module
+module 2 bi-24-port-copper-module
+!
+global-protocol-vlan
+!
+!
+vlan 1 name DEFAULT-VLAN by port
+!
+vlan 1401 name Increase by port
+ tag ethe 2/2
+ router-interface ve 1
+!
+vlan 1402 name SupportTechnologies by port
+ tag ethe 2/2
+ router-interface ve 2
+!
+vlan 1403 name Machasa by port
+ tag ethe 2/2
+ router-interface ve 3
+!
+vlan 1406 name Pensum by port
+ tag ethe 2/2
+ router-interface ve 6
+!
+vlan 1408 name Radisson by port
+ tag ethe 2/2
+ router-interface ve 8
+!
+vlan 1407 name COPEVA by port
+ tag ethe 2/2
+ router-interface ve 7
+!
+vlan 3 name Intcomex by port
+ untag ethe 2/3
+ router-interface ve 9
+!
+vlan 1405 name Forum by port
+ tag ethe 2/2
+ router-interface ve 5
+!
+vlan 1410 name "Radio Chilena" by port
+ tag ethe 2/2
+ router-interface ve 10
+!
+vlan 4 name SONAMI by port
+ untag ethe 2/4
+ router-interface ve 11
+!
+vlan 5 name Eurocapital by port
+ untag ethe 2/5
+ router-interface ve 12
+!
+vlan 1411 name "Zarate y Compaia" by port
+ tag ethe 2/2
+ router-interface ve 13
+!
+vlan 1420 name GLOBALCOM by port
+ tag ethe 2/2
+ router-interface ve 14
+!
+vlan 1412 name "Knox Darcy" by port
+ tag ethe 2/2
+ router-interface ve 15
+!
+vlan 1413 name ASES-SERV-TEC by port
+ tag ethe 2/2
+ router-interface ve 16
+!
+vlan 1414 name "Compass Catering" by port
+ tag ethe 2/2
+ router-interface ve 19
+!
+vlan 1409 name "Carter Holt Harvey" by port
+ tag ethe 2/2
+ router-interface ve 18
+!
+vlan 6 name Telehousing-tmp by port
+ untag ethe 2/14
+ router-interface ve 20
+!
+vlan 1421 name "Ediciones tecnicas tributarias" by port
+ tag ethe 2/2
+ router-interface ve 21
+!
+vlan 1422 name "Hypernet Ltda." by port
+ tag ethe 2/2
+ router-interface ve 22
+!
+vlan 1415 name "Leon Heller" by port
+ tag ethe 2/2
+ router-interface ve 23
+!
+vlan 1423 name "MSTC Corredores de Seguro" by port
+ tag ethe 2/2
+ router-interface ve 24
+!
+vlan 1425 name Ebox by port
+ tag ethe 2/2
+ router-interface ve 25
+!
+vlan 1427 name Builderhouse by port
+ tag ethe 2/2
+ router-interface ve 26
+!
+vlan 1428 name DataNet by port
+ tag ethe 2/2
+ router-interface ve 28
+!
+vlan 7 name Telnet by port
+ untag ethe 2/7
+ router-interface ve 27                
+!
+vlan 1426 name OpenBusiness by port
+ tag ethe 2/2
+ router-interface ve 29
+!
+vlan 1429 name "Time Appartements Chile Ltda." by port
+ tag ethe 2/2
+ router-interface ve 30
+!
+vlan 1430 name "TransExpress (Guzman Hermanos)" by port
+ tag ethe 2/2
+ router-interface ve 31
+!
+system-max vlan 64
+boot sys fl pri
+chassis name Bigiron
+enable telnet password
+enable super-user-password
+ip dns domain-name unete.cl
+ip dns server-address 206.48.128.133
+no ip irdp
+ip access-policy 10 deny any 206.48.128.0 255.255.255.0 tcp eq telnet log
+ip access-policy 11 deny any 206.48.128.255 255.255.255.255
+ip access-policy 12 perm any any
+ip access-policy 30 perm any any tcp eq http
+ip access-policy 31 perm any any tcp eq 20
+ip access-policy 32 perm any any tcp eq ftp
+ip access-policy 33 perm any any tcp eq 5800
+ip access-policy 34 perm any any tcp eq 5801
+ip access-policy 35 perm any any icmp
+ip access-policy 39 deny any 206.48.149.2 255.255.255.255
+ip access-policy 40 perm any any
+ip access-policy 60 perm any any
+ip route 1 0.0.0.0 0.0.0.0 206.48.128.1
+ip route 2 206.48.154.0 255.255.255.0 192.168.200.2
+ip route 15 200.2.98.0 255.255.255.0 192.168.173.11
+ip route 16 200.14.99.0 255.255.255.0 192.168.173.11
+ip route 17 200.32.72.0 255.255.255.0 192.168.173.11
+ip route 18 200.32.76.0 255.255.255.0 192.168.173.11
+ip route 19 200.41.8.0 255.255.255.0 192.168.173.11
+ip route 20 200.41.52.0 255.255.255.0 192.168.173.11
+ip route 22 200.32.73.0 255.255.255.0 192.168.173.11
+ip route 23 200.32.75.0 255.255.255.0 192.168.173.11
+ip route 24 200.32.74.0 255.255.255.0 192.168.173.11
+ip route 25 206.48.132.32 255.255.255.255 206.48.149.3
+ip route 27 200.12.17.0 255.255.255.0 200.10.224.41
+ip router-id 206.48.128.16
+logging 206.48.128.155
+snmp-server community ...... ro
+snmp-server contact Operaciones Unete.com S.A. - 3744570 - operaciones@unete.cl
+snmp-server location Apoquindo 3000 - Of 602 - Las Condes - Santiago - Chile
+!
+interface e 2/1
+ port-name Conexion_BB
+ ip address 206.48.128.16 255.255.255.0
+ ip ospf area 0.0.0.0
+ ip ospf priority 32
+ speed-duplex 100-full
+!
+interface e 2/2
+ port-name RedIP_Teleductos
+ speed-duplex 100-full
+!
+interface e 2/3
+ port-name Intcomex
+!
+interface e 2/4
+ port-name Sonami
+!
+interface e 2/5
+ port-name Eurocapital
+!
+interface e 2/7
+ port-name "Telnet SA"
+!
+interface e 2/14
+ port-name Barbera_Intraweb
+!
+interface e 2/15
+ disable
+ port-name CTC-Mundo
+ ip address 200.10.224.42 255.255.255.252
+!
+interface e 2/16
+ port-name NAP-Chile
+ ip address 192.168.173.2 255.255.255.0
+ no ip directed-broadcast
+ ip access-policy-g in 10 to 12
+ speed-duplex 100-full
+!
+interface e 2/24
+ port-name Max15
+!
+interface ve 1
+ ip address 206.48.135.225 255.255.255.224
+!
+interface ve 2
+ ip address 206.48.140.161 255.255.255.224
+!
+interface ve 3
+ ip address 206.48.135.33 255.255.255.224
+!
+interface ve 5
+ ip address 206.48.142.49 255.255.255.240
+!
+interface ve 6
+ ip address 206.48.135.161 255.255.255.240
+!
+interface ve 7
+ ip address 206.48.145.65 255.255.255.224
+!
+interface ve 8
+ ip address 206.48.135.193 255.255.255.224
+!
+interface ve 9
+ ip address 206.48.135.145 255.255.255.240      
+!
+interface ve 10
+ ip address 206.48.142.225 255.255.255.248
+!
+interface ve 11
+ ip address 206.48.142.30 255.255.255.224
+!
+interface ve 12
+ ip address 206.48.146.161 255.255.255.240
+!
+interface ve 13
+ ip address 206.48.146.209 255.255.255.240
+!
+interface ve 14
+ ip address 192.168.200.1 255.255.255.252
+!
+interface ve 15
+ ip address 206.48.146.193 255.255.255.240
+!
+interface ve 16
+ ip address 206.48.145.1 255.255.255.240
+!
+interface ve 18
+ ip address 206.48.155.1 255.255.255.240
+!
+interface ve 19
+ ip address 206.48.155.17 255.255.255.240
+!
+interface ve 20
+ ip address 206.48.149.1 255.255.255.248
+!
+interface ve 21
+ ip address 206.48.155.145 255.255.255.240
+!
+interface ve 22
+ ip address 206.48.155.161 255.255.255.240
+!
+interface ve 23
+ ip address 206.48.155.177 255.255.255.240
+!
+interface ve 24
+ ip address 206.48.156.17 255.255.255.248
+!
+interface ve 25
+ ip address 206.48.156.81 255.255.255.240
+!
+interface ve 26
+ ip address 206.48.155.225 255.255.255.240
+!
+interface ve 27
+ ip address 206.48.151.1 255.255.255.0
+!
+interface ve 28
+ ip address 206.48.156.49 255.255.255.240
+!
+interface ve 29
+ ip address 206.48.142.65 255.255.255.192
+!
+interface ve 30
+ ip address 206.48.156.97 255.255.255.240
+!
+interface ve 31
+ ip address 206.48.156.209 255.255.255.240
+!
+!
+router bgp
+ address-filter  10 permit 206.48.128.0 255.255.224.0 any
+ address-filter  11 permit 216.241.0.0 255.255.240.0 any
+ address-filter  12 permit 206.103.4.0 255.255.255.0 any
+ address-filter  13 permit 208.141.103.0 255.255.255.0 any
+ address-filter  14 permit 209.198.213.0 255.255.255.0 any
+ address-filter  15 permit 204.254.85.32 255.255.255.248 any
+ address-filter  16 permit 200.41.243.0 255.255.255.0 any
+ address-filter  30 permit 200.41.243.0 255.255.255.0 any
+ as-path-filter  1 permit ^{7004}$
+ as-path-filter  2 permit ^{4995}$
+ as-path-filter  3 permit ^{60000}$
+ as-path-filter  4 permit ^{12246}$
+ as-path-filter  5 permit ^{14259}$
+ as-path-filter  6 permit ^{6429}$
+ as-path-filter  7 permit ^{10778}$
+ as-path-filter  8 deny .*
+ local-as 10502
+ max-neighbors 10
+ max-routes 10000
+ neighbor  192.168.173.4 remote-as 4995
+ neighbor  192.168.173.4 weight 500
+ neighbor  192.168.173.4 distribute-list out  10 11 12 13 14 15 16
+ neighbor  192.168.173.9 remote-as 60000
+ neighbor  192.168.173.9 distribute-list out  10 11 12 13 14 15 16
+ neighbor  192.168.173.12 remote-as 12246
+ neighbor  192.168.173.12 distribute-list out  10 11 12 13 14 15 16
+ neighbor  192.168.173.13 remote-as 14259
+ neighbor  192.168.173.13 distribute-list out  10 11 12 13 14 15 16
+ neighbor  192.168.173.7 remote-as 6429
+ neighbor  192.168.173.7 distribute-list out  10 11 12 13 14 15 16
+ neighbor  192.168.173.6 remote-as 10778
+ neighbor  192.168.173.6 distribute-list out  10 11 12 13 14 15 16
+ neighbor  200.10.224.41 remote-as 7004
+ neighbor  200.10.224.41 distribute-list out  10 11 12 13 14 15 16
+ network  206.48.128.0 255.255.224.0
+ network  216.241.0.0 255.255.240.0
+ network  206.103.4.0 255.255.255.0
+ network  208.141.103.0 255.255.255.0
+ network  209.198.213.0 255.255.255.0
+ network  204.254.85.32 255.255.255.248
+ network  200.41.243.0 255.255.255.0
+ redistribute static
+!                               
+router ospf
+ area 0.0.0.0 normal
+ default-metric 150
+ max-routes 4000
+ permit redistribute 1 static
+ permit redistribute 2 bgp
+ redistribution
+!
+end
+                

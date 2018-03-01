@@ -1,0 +1,138 @@
+Startup configuration:
+!
+!
+!
+server force-delete
+!
+server real Deimos.interaccess.cl 206.48.128.200
+ max-conn 100000
+ port http
+ port http url "HEAD /"
+ port 7070
+ port 554
+!
+server real Fobos.interaccess.cl 206.48.128.201
+ max-conn 100000
+ weight 2
+ port http
+ port http url "HEAD /"
+ port 7070
+ port 554
+!
+server cache-name CacheFlow 209.198.213.4
+ port http
+ port http url "HEAD /"
+!
+server cache-name CacheSquid 209.198.213.3
+ dest-nat
+ port http
+ port http url "HEAD /"
+!
+server cache-name Squid-Telintar 200.41.243.2
+ dest-nat
+ port http
+ port http url "HEAD /"
+!
+!
+server virtual www.VivaElLunes.cl 206.48.128.202
+ predictor weighted
+ port http
+ port 7070
+ port 554
+ port 0 disable
+ bind http Deimos.interaccess.cl http Fobos.interaccess.cl http
+ bind 7070 Fobos.interaccess.cl 7070 Deimos.interaccess.cl 7070
+ bind 554 Deimos.interaccess.cl 554 Fobos.interaccess.cl 554
+!
+server cache-group 1
+ cache-name CacheSquid
+
+server cache-group 2
+ cache-name Squid-Telintar
+
+
+
+!
+!
+boot sys fl pri
+enable telnet password
+enable super-user-password
+enable read-only-password
+ip address 206.48.128.4 255.255.255.0
+ip default-gateway 206.48.128.1
+ip dns domain-name unete.cl
+IP DNS server-address 206.48.128.133
+ip policy 1 cache tcp http local
+lock-address Ethe 1 addr-c 65169
+logging 206.48.128.155
+password-change telnet-cli
+snmp-s cont Operaciones
+snmp-s loca Santa Elena 2222
+!
+interface e 1
+no cache-group
+ port-name FastIron
+ speed-duplex 100-full
+!
+interface e 2
+ port-name PacketShaper
+ speed-duplex 100-full
+ip-policy 1
+!
+interface e 3
+no cache-group
+ port-name Interpacket
+!
+interface e 4
+ port-name TNT1
+!
+interface e 5
+no cache-group
+ port-name MCI
+!
+interface e 6
+no cache-group
+ port-name GIPFO
+!
+interface e 7
+ port-name Enlace StaElena
+ speed-duplex 100-full
+!
+interface e 8
+no cache-group
+ port-name Netiron
+ speed-duplex 100-full
+!
+interface e 9
+ port-name Max6090-11
+!
+interface e 10
+ port-name Operaciones
+ speed-duplex 100-full
+!
+interface e 11
+no cache-group
+ port-name 4500-3
+ speed-duplex 100-full
+!
+interface e 12
+ port-name TNT2
+ speed-duplex 100-full
+!
+interface e 13
+ port-name TNT3
+ speed-duplex 100-full
+!
+interface e 14
+no cache-group
+ port-name Red-Interna
+!
+interface e 15
+ port-name ATM_TDM_FC
+ speed-duplex 100-full
+!
+interface e 16
+ port-name Max6090-7
+!
+end
+                    

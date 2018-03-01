@@ -1,0 +1,768 @@
+
+!
+version 12.0
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname Router-ATM
+!
+enable secret 5 $1$Q5Ui$aKKtS05wUi.Q2YFV0dwNv0
+enable password connet99
+!
+ip subnet-zero
+ip name-server 206.48.128.133
+bridge irb
+!
+!
+controller E1 0
+ framing NO-CRC4 
+ channel-group 0 timeslots 1-4
+ channel-group 1 timeslots 5
+ channel-group 2 timeslots 9
+ channel-group 3 timeslots 10
+ channel-group 4 timeslots 11
+ channel-group 5 timeslots 13-14
+ channel-group 6 timeslots 19
+ channel-group 7 timeslots 21
+ channel-group 8 timeslots 22-23
+ description Conexion Red TDM Firstcom
+!
+!
+interface Serial0:0
+ description TDM-PROCHILE 512 Kbps
+ ip unnumbered FastEthernet0
+ no ip directed-broadcast
+ encapsulation ppp
+ shutdown
+!
+interface Serial0:1
+ description FENIX 64 Kbps
+ ip unnumbered FastEthernet0
+ no ip directed-broadcast
+ encapsulation ppp
+!
+interface Serial0:2
+ description LeadTravel 64 Kbps
+ ip unnumbered FastEthernet0
+ no ip directed-broadcast
+ encapsulation ppp
+!
+interface Serial0:3
+ description Claro Santa Cruz
+ ip unnumbered FastEthernet0
+ no ip directed-broadcast
+ encapsulation ppp
+!
+interface Serial0:4
+ description Britcouncil 64 Kbps
+ ip unnumbered FastEthernet0
+ no ip directed-broadcast
+ encapsulation ppp
+!
+interface Serial0:5
+ description Firstcom 128 Kbps
+ ip unnumbered FastEthernet0
+ no ip directed-broadcast
+ encapsulation ppp
+!
+interface Serial0:6
+ description Fundacion Ford 64 Kbps
+ ip unnumbered FastEthernet0
+ no ip directed-broadcast
+ encapsulation ppp
+!
+interface Serial0:7
+ description Ingendesa 64 Kbps
+ ip unnumbered FastEthernet0
+ no ip directed-broadcast
+ encapsulation ppp
+!
+interface Serial0:8
+ description Intec 64 Kbps
+ ip unnumbered FastEthernet0
+ no ip directed-broadcast
+ encapsulation ppp
+!
+interface ATM0
+ no ip address
+ no ip directed-broadcast
+ no ip mroute-cache
+ atm clock INTERNAL
+ no atm ilmi-keepalive
+!
+interface ATM0.1 point-to-point
+ description !!! Conexion a Prochile
+ no ip directed-broadcast
+ shutdown
+ atm pvc 1 0 101 aal5snap
+ traffic-shape rate 256000 7936 7936 1000
+ bridge-group 1
+!
+interface ATM0.2 point-to-point
+ description !!! Acceso a Firstcom
+ no ip directed-broadcast
+ shutdown
+ atm pvc 2 0 102 aal5snap 256 256 100
+ bridge-group 2
+!
+interface ATM0.3 point-to-point
+ description !!!Acceso a IntraWeb
+ no ip directed-broadcast
+ atm pvc 3 0 103 aal5snap
+ traffic-shape rate 2000000 50000 50000 1000
+ bridge-group 3
+!
+interface ATM0.4 point-to-point
+ description !!!Reservado a Unicom
+ no ip directed-broadcast
+ atm pvc 4 0 104 aal5snap
+ traffic-shape rate 2000000 50000 50000 1000
+ bridge-group 4
+!
+interface ATM0.5 point-to-point
+ description !!!Supervision Firstcom
+ ip address 206.48.139.25 255.255.255.252
+ no ip directed-broadcast
+ shutdown
+ atm pvc 5 0 33 aal5snap 256 128 100
+!
+interface ATM0.6 point-to-point
+ description !!!Acceso Conmutado
+ no ip directed-broadcast
+ shutdown
+ atm pvc 6 0 106 aal5snap
+ traffic-shape rate 1000000 25000 25000 1000
+ bridge-group 5
+!
+interface ATM0.7 point-to-point
+ description !!! Conexion a AXA Seguros
+ no ip directed-broadcast
+ atm pvc 7 0 107 aal5snap 128 64 100
+ bridge-group 6
+!
+interface ATM0.8 point-to-point
+ description !!!Conexion hacia S.G.C. AJUSTADORES.
+ no ip directed-broadcast
+ atm pvc 8 0 109 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 7
+!
+interface ATM0.9 point-to-point
+ description !!! Conexion a Pharma Venefits de Chile
+ no ip directed-broadcast
+ atm pvc 9 0 108 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 8
+!
+interface ATM0.10 point-to-point
+ description !!!Conexion hacia SGA IBERSIS.
+ no ip directed-broadcast
+ atm pvc 10 0 110 aal5snap 256 128 100
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 9
+!
+interface ATM0.11 point-to-point
+ description !!!Conexion a Corp. Cam. Construccion
+ no ip directed-broadcast
+ atm pvc 11 0 111 aal5snap
+ traffic-shape rate 2000000 50000 50000 1000
+ bridge-group 10
+!
+interface ATM0.12 point-to-point
+ description !!!Conexion a Reltex
+ no ip directed-broadcast
+ atm pvc 12 0 112 aal5snap
+ traffic-shape rate 2000000 50000 50000 1000
+ bridge-group 11
+!
+interface ATM0.13 point-to-point
+ description !!!Conexion a Telecomunicaciones Alemanas
+ no ip directed-broadcast
+ atm pvc 13 0 113 aal5snap
+ traffic-shape rate 128000 64000 64000 1000
+ bridge-group 12
+!
+interface ATM0.14 point-to-point
+ description !!!Conexion a Pentaxis
+ no ip directed-broadcast
+ atm pvc 14 0 114 aal5snap
+ traffic-shape rate 128000 64000 64000 1000
+ bridge-group 13
+!
+interface ATM0.15 point-to-point
+ description !!!Conexion a FyF
+ no ip directed-broadcast
+ atm pvc 15 0 115 aal5snap
+ traffic-shape rate 128000 64000 64000 1000
+ bridge-group 14
+!
+interface ATM0.16 point-to-point
+ description !!!Conexion UNIACC
+ no ip directed-broadcast
+ atm pvc 16 0 116 aal5snap
+ traffic-shape rate 2000000 100000 100000 1000
+ bridge-group 15
+!
+interface ATM0.17 point-to-point
+ description !!!Conexion OLIVETTI
+ no ip directed-broadcast
+ atm pvc 17 0 117 aal5snap
+ traffic-shape rate 128000 100000 100000 1000
+ bridge-group 16
+!
+interface ATM0.18 point-to-point
+ description !!!Conexion Rodrigo y Vera
+ no ip directed-broadcast
+ atm pvc 18 0 118 aal5snap
+ traffic-shape rate 128000 100000 100000 1000
+ bridge-group 17
+!
+interface ATM0.19 point-to-point
+ description !!! Conexion Estudio Harnecker
+ no ip directed-broadcast
+ atm pvc 19 0 119 aal5snap
+ traffic-shape rate 128000 100000 100000 1000
+ bridge-group 18
+!
+interface ATM0.20 point-to-point
+ description !!! Conexion Etranslate
+ no ip directed-broadcast
+ atm pvc 20 0 120 aal5snap
+ traffic-shape rate 128000 100000 100000 1000
+ bridge-group 19
+!
+interface ATM0.21 point-to-point
+ description !! Conexion Asoc de Aseguradores
+ no ip directed-broadcast
+ atm pvc 21 0 121 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 20
+!
+interface ATM0.22 point-to-point
+ description !!!Conexion Estudios Faraggi
+ no ip directed-broadcast
+ atm pvc 22 0 122 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 21
+!
+interface ATM0.23 point-to-point
+ description !!!Conexion Paul Bengoa Vargas
+ no ip directed-broadcast
+ atm pvc 23 0 123 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 22
+!
+interface ATM0.24 point-to-point
+ description !!! Conexion German Tapia y Cia
+ no ip directed-broadcast
+ atm pvc 24 0 124 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 23
+!
+interface ATM0.25 point-to-point
+ description !!! Conexion Comercial Astech Ltda.
+ no ip directed-broadcast
+ atm pvc 25 0 125 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 24
+!
+interface ATM0.26 point-to-point
+ description !!! Conexion Inversiones NORTH
+ no ip directed-broadcast
+ atm pvc 26 0 126 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 25
+!
+interface ATM0.27 point-to-point
+ description !!! Conexion Projection System
+ no ip directed-broadcast
+ atm pvc 27 0 127 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 26
+!
+interface ATM0.28 point-to-point
+ description !!! Conexion Alerta al conocimiento
+ no ip directed-broadcast
+ atm pvc 28 0 128 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 27
+!
+interface ATM0.29 point-to-point
+ description !!! Conexion Samsung Electronics
+ no ip directed-broadcast
+ atm pvc 29 0 129 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 28
+!
+interface ATM0.30 point-to-point
+ description !!! Conexion EMC Internacional
+ no ip directed-broadcast
+ atm pvc 30 0 130 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 29
+!
+interface ATM0.31 point-to-point
+ description !!! Conexion Comercial Doral
+ no ip directed-broadcast
+ atm pvc 31 0 131 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 30
+!
+interface ATM0.32 point-to-point
+ description !!! Conexion EasyMail S.A.
+ no ip directed-broadcast
+ atm pvc 32 0 132 aal5snap
+ traffic-shape rate 512000 12800 12800 1000
+ bridge-group 31
+!
+interface ATM0.33 point-to-point
+ description !!! Conexion Asset Chile
+ no ip directed-broadcast
+ atm pvc 33 0 133 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 32
+!
+interface ATM0.34 point-to-point
+ description !!! Conexion a Comercial Exportadora Importadora S.A.
+ no ip directed-broadcast
+ atm pvc 34 0 134 aal5snap
+ traffic-shape rate 256000 7936 7936 1000
+ bridge-group 33
+!
+interface ATM0.35 point-to-point
+ description !!! Conexion a Laplaza
+ no ip directed-broadcast
+ atm pvc 35 0 135 aal5snap
+ traffic-shape rate 4000000 100000 100000 1000
+ bridge-group 34
+!
+interface ATM0.36 point-to-point
+ description !!! Conexion a Embajada de Finlandia
+ no ip directed-broadcast
+ atm pvc 36 0 136 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 35
+!
+interface ATM0.37 point-to-point
+ description !!! Conexion a Gas Atacama
+ no ip directed-broadcast
+ atm pvc 37 0 137 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 36
+!
+interface ATM0.38 point-to-point
+ description !!! Conexion a Echeverria Izquierdo
+ no ip directed-broadcast
+ atm pvc 38 0 138 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 37
+!
+interface ATM0.39 point-to-point
+ description !!! Conexion a Previsora S.A.
+ no ip directed-broadcast
+ atm pvc 39 0 139 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 38
+!
+interface ATM0.40 point-to-point
+ description !!! Conexion a Teknos S.A. Apoquindo
+ no ip directed-broadcast
+ atm pvc 40 0 140 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 39
+!
+interface ATM0.41 point-to-point
+ description !!! Conexion Colegio Saint George 
+ no ip directed-broadcast
+ atm pvc 41 0 141 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 40
+!
+interface ATM0.42 point-to-point
+ description !!! Conexion BROTEC S.A. 
+ no ip directed-broadcast
+ atm pvc 42 0 142 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 41
+!
+interface ATM0.43 point-to-point
+ description !!! Mellafe y Salas
+ no ip directed-broadcast
+ atm pvc 43 0 143 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 42
+!
+interface ATM0.44 point-to-point
+ description !!! Conexion a El Sitio
+ no ip directed-broadcast
+ atm pvc 44 0 144 aal5snap
+ traffic-shape rate 4000000 100000 100000 1000
+ bridge-group 43
+!
+interface ATM0.45 point-to-point
+ description !!! Conexion a DeRemate.com
+ no ip directed-broadcast
+ atm pvc 45 0 145 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 44
+!
+interface ATM0.46 point-to-point
+ description !!! Conexion a Sisteco
+ no ip directed-broadcast
+ atm pvc 46 0 146 aal5snap
+ traffic-shape rate 128000 7936 7936 1000
+ bridge-group 45
+!
+interface FastEthernet0
+ bandwidth 100000
+ ip address 206.48.128.9 255.255.255.0
+ no ip directed-broadcast
+ full-duplex
+!
+interface BVI1
+ ip address 206.48.139.6 255.255.255.252
+ no ip directed-broadcast
+ shutdown
+!
+interface BVI2
+ ip address 206.48.139.10 255.255.255.252
+ no ip directed-broadcast
+ shutdown
+!
+interface BVI3
+ ip address 206.48.139.14 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI4
+ ip address 206.48.139.21 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI5
+ ip address 192.168.0.250 255.255.255.0
+ no ip directed-broadcast
+ shutdown
+!
+interface BVI6
+ ip address 206.48.139.18 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI7
+ ip address 206.48.139.29 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI8
+ ip address 206.48.139.33 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI9
+ ip address 206.48.139.37 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI10
+ ip address 206.48.139.41 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI11
+ ip address 206.48.139.45 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI12
+ ip address 206.48.139.49 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI13
+ ip address 206.48.139.53 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI14
+ ip address 206.48.139.57 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI15
+ ip address 206.48.139.61 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI16
+ ip address 206.48.139.65 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI17
+ ip address 206.48.139.69 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI18
+ ip address 206.48.139.73 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI19
+ ip address 206.48.139.77 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI20
+ ip address 206.48.139.81 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI21
+ ip address 206.48.139.85 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI22
+ ip address 206.48.139.89 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI23
+ ip address 206.48.139.93 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI24
+ ip address 206.48.139.97 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI25
+ ip address 206.48.139.101 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI26
+ ip address 206.48.139.105 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI27
+ ip address 206.48.139.109 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI28
+ ip address 206.48.139.113 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI29
+ ip address 206.48.139.117 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI30
+ ip address 206.48.155.65 255.255.255.240
+ no ip directed-broadcast
+!
+interface BVI31
+ ip address 206.48.139.121 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI32
+ ip address 206.48.139.125 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI33
+ ip address 206.48.139.129 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI34
+ ip address 206.48.155.193 255.255.255.240
+ no ip directed-broadcast
+!
+interface BVI35
+ ip address 206.48.139.133 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI36
+ ip address 206.48.139.137 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI37
+ ip address 206.48.139.141 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI38
+ ip address 206.48.139.145 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI39
+ ip address 206.48.140.228 255.255.255.240
+ no ip directed-broadcast
+!
+interface BVI40
+ ip address 206.48.139.149 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI41
+ ip address 206.48.139.153 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI42
+ ip address 206.48.140.193 255.255.255.240
+ no ip directed-broadcast
+!
+interface BVI43
+ ip address 206.48.139.157 255.255.255.252
+ no ip directed-broadcast
+!
+interface BVI44
+ ip address 206.48.156.113 255.255.255.240
+ no ip directed-broadcast
+!
+interface BVI45
+ no ip address
+ no ip directed-broadcast
+!
+router ospf 10502
+ redistribute connected subnets
+ redistribute static subnets
+ network 206.48.128.0 0.0.31.255 area 0.0.0.0
+ default-metric 5
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 206.48.128.1
+ip route 10.253.1.104 255.255.255.252 206.48.139.58
+ip route 200.30.60.64 255.255.255.224 Serial0:8
+ip route 206.48.129.32 255.255.255.224 Serial0:1
+ip route 206.48.129.64 255.255.255.224 Serial0:6
+ip route 206.48.129.96 255.255.255.224 Serial0:4
+ip route 206.48.130.0 255.255.255.0 Serial0:5
+ip route 206.48.134.64 255.255.255.224 206.48.139.38
+ip route 206.48.134.160 255.255.255.224 206.48.139.46
+ip route 206.48.134.192 255.255.255.224 206.48.139.50
+ip route 206.48.134.224 255.255.255.224 206.48.139.54
+ip route 206.48.135.0 255.255.255.240 206.48.139.102
+ip route 206.48.135.16 255.255.255.240 206.48.139.110
+ip route 206.48.135.64 255.255.255.192 206.48.139.74
+ip route 206.48.135.128 255.255.255.240 206.48.139.78
+ip route 206.48.136.96 255.255.255.224 206.48.139.22
+ip route 206.48.136.128 255.255.255.224 206.48.139.42
+ip route 206.48.136.160 255.255.255.224 206.48.139.17
+ip route 206.48.136.192 255.255.255.224 206.48.139.30
+ip route 206.48.136.224 255.255.255.224 206.48.139.34
+ip route 206.48.137.0 255.255.255.0 Serial0:3
+ip route 206.48.139.0 255.255.255.0 Null0
+ip route 206.48.140.0 255.255.255.192 Serial0:7
+ip route 206.48.140.64 255.255.255.192 Serial0:2
+ip route 206.48.140.208 255.255.255.240 206.48.140.194
+ip route 206.48.140.240 255.255.255.240 206.48.140.194
+ip route 206.48.142.32 255.255.255.240 206.48.139.70
+ip route 206.48.142.240 255.255.255.240 206.48.139.82
+ip route 206.48.143.0 255.255.255.128 206.48.139.13
+ip route 206.48.145.16 255.255.255.240 206.48.139.106
+ip route 206.48.145.96 255.255.255.224 206.48.139.66
+ip route 206.48.145.208 255.255.255.240 206.48.139.86
+ip route 206.48.145.224 255.255.255.224 206.48.139.62
+ip route 206.48.146.128 255.255.255.240 206.48.139.154
+ip route 206.48.146.224 255.255.255.240 206.48.139.90
+ip route 206.48.146.240 255.255.255.248 206.48.139.94
+ip route 206.48.146.248 255.255.255.248 206.48.139.98
+ip route 206.48.153.0 255.255.255.0 206.48.139.58
+ip route 206.48.155.48 255.255.255.240 206.48.139.118
+ip route 206.48.155.80 255.255.255.240 206.48.139.122
+ip route 206.48.155.112 255.255.255.248 206.48.139.126
+ip route 206.48.155.128 255.255.255.240 206.48.139.130
+ip route 206.48.155.208 255.255.255.240 206.48.139.134
+ip route 206.48.155.240 255.255.255.240 206.48.139.146
+ip route 206.48.156.0 255.255.255.240 206.48.139.142
+ip route 206.48.156.32 255.255.255.240 206.48.139.150
+ip route 206.48.156.64 255.255.255.240 206.48.139.138
+ip route 206.48.156.128 255.255.255.224 206.48.139.158
+!
+logging 206.48.128.155
+snmp-server community public RO
+snmp-server location Apoquindo 3000 of 602 - Las Condes - Santiago - Chile
+snmp-server contact Operaciones Unete.com - Chile - 3744500
+!
+bridge 1 protocol ieee
+ bridge 1 route ip
+bridge 2 protocol ieee
+ bridge 2 route ip
+bridge 3 protocol ieee
+ bridge 3 route ip
+bridge 4 protocol ieee
+ bridge 4 route ip
+bridge 5 protocol ieee
+ bridge 5 route ip
+bridge 6 protocol ieee
+ bridge 6 route ip
+bridge 7 protocol ieee
+ bridge 7 route ip
+bridge 8 protocol ieee
+ bridge 8 route ip
+bridge 9 protocol ieee
+ bridge 9 route ip
+bridge 10 protocol ieee
+ bridge 10 route ip
+bridge 11 protocol ieee
+ bridge 11 route ip
+bridge 12 protocol ieee
+ bridge 12 route ip
+bridge 13 protocol ieee
+ bridge 13 route ip
+bridge 14 protocol ieee
+ bridge 14 route ip
+bridge 15 protocol ieee
+ bridge 15 route ip
+bridge 16 protocol ieee
+ bridge 16 route ip
+bridge 17 protocol ieee
+ bridge 17 route ip
+bridge 18 protocol ieee
+ bridge 18 route ip
+bridge 19 protocol ieee
+ bridge 19 route ip
+bridge 20 protocol ieee
+ bridge 20 route ip
+bridge 21 protocol ieee
+ bridge 21 route ip
+bridge 22 protocol ieee
+ bridge 22 route ip
+bridge 23 protocol ieee
+ bridge 23 route ip
+bridge 24 protocol ieee
+ bridge 24 route ip
+bridge 25 protocol ieee
+ bridge 25 route ip
+bridge 26 protocol ieee
+ bridge 26 route ip
+bridge 27 protocol ieee
+ bridge 27 route ip
+bridge 28 protocol ieee
+ bridge 28 route ip
+bridge 29 protocol ieee
+ bridge 29 route ip
+bridge 30 protocol ieee
+ bridge 30 route ip
+bridge 31 protocol ieee
+ bridge 31 route ip
+bridge 32 protocol ieee
+ bridge 32 route ip
+bridge 33 protocol ieee
+ bridge 33 route ip
+bridge 34 protocol ieee
+ bridge 34 route ip
+bridge 35 protocol ieee
+ bridge 35 route ip
+bridge 36 protocol ieee
+ bridge 36 route ip
+bridge 37 protocol ieee
+ bridge 37 route ip
+bridge 38 protocol ieee
+ bridge 38 route ip
+bridge 39 protocol ieee
+ bridge 39 route ip
+bridge 40 protocol ieee
+ bridge 40 route ip
+bridge 41 protocol ieee
+ bridge 41 route ip
+bridge 42 protocol ieee
+ bridge 42 route ip
+bridge 43 protocol ieee
+ bridge 43 route ip
+bridge 44 protocol ieee
+ bridge 44 route ip
+bridge 45 protocol ieee
+ bridge 45 route ip
+!
+line con 0
+ password connet99
+ login
+ transport input none
+line aux 0
+ password connet99
+line vty 0 4
+ password connet99
+ login
+!
+end

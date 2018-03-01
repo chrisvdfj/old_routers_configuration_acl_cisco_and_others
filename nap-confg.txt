@@ -1,0 +1,232 @@
+
+!
+version 11.1
+service password-encryption
+no service udp-small-servers
+no service tcp-small-servers
+!
+hostname nap
+!
+enable secret 5 $1$1wYw$IcTc7J1Gn0Cr2XAyA.1/s.
+enable password 7 060101715948
+!
+username root
+ip subnet-zero
+prompt Router>
+frame-relay switching
+!
+interface Ethernet0
+ ip address 200.10.224.42 255.255.255.252 secondary
+ ip address 192.168.173.8 255.255.255.0 secondary
+ ip address 206.103.4.37 255.255.255.0
+ ip route-cache same-interface
+ fair-queue 64
+!
+interface Serial0
+ no ip address
+ encapsulation frame-relay IETF
+ frame-relay lmi-type q933a
+ frame-relay intf-type dce
+!
+interface Serial0.1 point-to-point
+ ip unnumbered Ethernet0
+ frame-relay interface-dlci 17   
+!
+interface Serial1
+ ip address 204.70.44.78 255.255.255.252
+ ip access-group 10 out
+ no ip unreachables
+ bandwidth 256000
+ fair-queue 64
+!
+router bgp 60001
+ network 206.103.4.0
+ network 208.141.103.0
+ network 216.226.216.0
+ network 209.198.215.64 mask 255.255.255.192
+ neighbor 192.168.173.2 remote-as 10502
+ neighbor 192.168.173.4 remote-as 4995
+ neighbor 192.168.173.6 remote-as 10778
+ neighbor 192.168.173.7 remote-as 6429
+ neighbor 192.168.173.10 remote-as 7993
+ distribute-list 10 out
+!
+ip name-server 206.103.4.2
+no ip classless
+ip route 0.0.0.0 0.0.0.0 204.70.44.77
+ip route 146.83.0.0 255.255.0.0 200.10.224.41
+ip route 146.155.0.0 255.255.0.0 192.168.173.7
+ip route 146.155.56.18 255.255.255.255 Serial1
+ip route 156.97.0.0 255.255.0.0 200.10.224.41
+ip route 158.170.0.0 255.255.0.0 192.168.173.7
+ip route 158.251.0.0 255.255.0.0 200.10.224.41
+ip route 161.25.206.11 255.255.255.255 192.168.173.2
+ip route 161.131.0.0 255.255.0.0 200.10.224.41
+ip route 163.247.0.0 255.255.0.0 200.10.224.41
+ip route 165.183.0.0 255.255.0.0 200.10.224.41
+ip route 166.75.0.0 255.255.0.0 200.10.224.41
+ip route 166.110.0.0 255.255.0.0 200.10.224.41
+ip route 170.18.0.0 255.255.0.0 200.10.224.41
+ip route 172.16.0.0 255.255.0.0 Serial0.1
+ip route 172.16.198.1 255.255.255.255 Serial0.1
+ip route 172.18.14.0 255.255.255.0 Serial0.1
+ip route 172.18.14.0 255.255.255.0 206.103.4.1
+ip route 192.168.173.8 255.255.255.255 Ethernet0
+ip route 192.203.158.0 255.255.255.0 200.10.224.41
+ip route 192.231.140.0 255.255.255.0 200.10.224.41
+ip route 198.22.250.0 255.255.255.0 200.10.224.41
+ip route 199.186.25.0 255.255.255.0 200.10.224.41
+ip route 199.186.28.0 255.255.252.0 200.10.224.41
+ip route 199.186.32.0 255.255.254.0 200.10.224.41
+ip route 199.186.34.0 255.255.255.0 200.10.224.41
+ip route 200.0.115.0 255.255.255.0 200.10.224.41
+ip route 200.1.16.0 255.255.240.0 200.10.224.41
+ip route 200.1.131.0 255.255.255.0 200.10.224.41
+ip route 200.2.92.0 255.255.252.0 200.10.224.41
+ip route 200.2.99.0 255.255.255.0 200.10.224.41
+ip route 200.9.98.0 255.255.255.0 200.10.224.41
+ip route 200.9.111.0 255.255.255.0 200.10.224.41
+ip route 200.9.128.0 255.255.255.0 200.10.224.41
+ip route 200.9.142.0 255.255.255.0 200.10.224.41
+ip route 200.9.215.0 255.255.255.0 200.10.224.41
+ip route 200.9.225.0 255.255.255.0 200.10.224.41
+ip route 200.10.182.0 255.255.255.0 200.10.224.41
+ip route 200.10.220.0 255.255.252.0 200.10.224.41
+ip route 200.10.225.0 255.255.255.0 200.10.224.41
+ip route 200.10.234.0 255.255.255.0 200.10.224.41
+ip route 200.10.236.0 255.255.255.0 200.10.224.41
+ip route 200.10.237.0 255.255.255.0 200.10.224.41
+ip route 200.10.251.0 255.255.255.0 200.10.224.41
+ip route 200.10.252.0 255.255.255.0 200.10.224.41
+ip route 200.10.255.0 255.255.255.0 200.10.224.41
+ip route 200.12.130.0 255.255.255.0 200.10.224.41
+ip route 200.12.140.0 255.255.254.0 200.10.224.41
+ip route 200.14.64.0 255.255.255.0 200.10.224.41
+ip route 200.14.65.0 255.255.255.0 200.10.224.41
+ip route 200.14.92.0 255.255.255.0 200.10.224.41
+ip route 200.14.93.0 255.255.255.0 200.10.224.41
+ip route 200.14.94.0 255.255.255.0 200.10.224.41
+ip route 200.14.100.0 255.255.252.0 200.10.224.41
+ip route 200.14.108.0 255.255.255.0 200.10.224.41
+ip route 200.14.155.0 255.255.255.0 200.10.224.41
+ip route 200.14.229.0 255.255.255.0 200.10.224.41
+ip route 200.14.230.0 255.255.255.0 200.10.224.41
+ip route 200.14.247.0 255.255.255.0 200.10.224.41
+ip route 200.28.0.0 255.255.0.0 200.10.224.41
+ip route 200.28.216.0 255.255.255.0 200.10.224.41
+ip route 200.28.216.88 255.255.255.255 Serial1
+ip route 200.28.216.129 255.255.255.255 200.10.224.41
+ip route 200.29.32.0 255.255.224.0 200.10.224.41
+ip route 200.31.32.0 255.255.255.0 192.168.173.7
+ip route 200.32.72.0 255.255.252.0 192.168.173.11
+ip route 200.32.76.0 255.255.255.0 192.168.173.11
+ip route 200.41.8.0 255.255.255.0 192.168.173.11
+ip route 200.41.52.0 255.255.255.0 192.168.173.11
+ip route 206.34.128.0 255.255.240.0 200.10.224.41
+ip route 206.48.24.0 255.255.255.0 192.168.173.9
+ip route 206.48.84.0 255.255.252.0 192.168.173.9
+ip route 206.48.134.64 255.255.255.240 192.168.173.2
+ip route 206.48.136.0 255.255.255.0 192.168.173.2
+ip route 206.48.145.64 255.255.255.224 Ethernet0
+ip route 206.84.71.0 255.255.255.0 192.168.173.2
+ip route 206.84.80.0 255.255.255.0 192.168.173.2
+ip route 206.84.92.0 255.255.255.0 192.168.173.2
+ip route 206.84.95.0 255.255.255.0 192.168.173.2
+ip route 206.103.4.0 255.255.255.0 Ethernet0
+ip route 206.103.4.250 255.255.255.255 Serial0.1
+ip route 206.103.4.251 255.255.255.255 Serial0.1
+ip route 206.137.97.0 255.255.255.0 192.168.173.2
+ip route 208.135.19.0 255.255.255.0 192.168.173.4
+ip route 208.141.103.0 255.255.255.0 Serial0.1
+ip route 208.141.103.0 255.255.255.0 206.103.4.1
+ip route 208.141.103.10 255.255.255.255 208.141.103.9
+ip route 209.155.82.18 255.255.255.255 200.10.224.41
+ip route 209.198.215.64 255.255.255.192 Ethernet0
+ip route 209.198.215.160 255.255.255.224 192.168.173.2
+ip route 216.226.216.0 255.255.255.0 206.103.4.1
+access-list 10 permit 208.141.103.0 0.0.0.255
+access-list 10 permit 206.103.4.0 0.0.0.255
+access-list 10 permit 209.198.215.64 0.0.0.63
+access-list 10 permit 216.226.216.0 0.0.0.255
+access-list 10 deny   any
+access-list 15 deny   206.103.4.3
+access-list 15 permit 206.103.4.0 0.0.0.255
+access-list 15 permit 208.141.103.0 0.0.0.255
+access-list 15 permit 209.198.215.64 0.0.0.63
+access-list 15 deny   any
+access-list 101 deny   tcp any any neq 6667
+access-list 101 deny   tcp any host 206.103.4.2
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.27.9.11 eq 6667
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.27.2.40 eq 6667
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.14.80.66 eq 6667
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.31.43.33 eq 6667
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.27.103.45 eq 6667
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.27.9.11 eq 6666
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.27.2.40 eq 6666
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.14.80.66 eq 6666
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.31.43.33 eq 6666
+access-list 101 permit tcp 208.141.103.0 0.0.0.255 host 200.27.103.45 eq 6666
+access-list 110 deny   tcp any any neq www
+access-list 110 deny   tcp any 206.103.4.0 0.0.0.255 eq www
+access-list 110 deny   tcp 206.103.4.0 0.0.0.255 any
+access-list 110 deny   tcp 209.198.215.64 0.0.0.63 any eq www
+access-list 110 permit tcp 208.141.103.0 0.0.0.255 any eq www
+access-list 110 deny   tcp any any eq www
+access-list 120 permit ip 206.103.4.0 0.0.0.255 host 206.103.4.3
+access-list 120 permit ip 208.141.103.0 0.0.0.255 host 206.103.4.3
+access-list 120 permit ip 209.198.215.64 0.0.0.63 host 206.103.4.3
+access-list 120 deny   ip any host 206.103.4.3
+access-list 120 permit ip any any
+access-list 130 permit icmp 206.103.4.0 0.0.0.255 host 206.103.4.37
+access-list 130 permit icmp 208.141.103.0 0.0.0.255 host 206.103.4.37
+access-list 130 permit icmp 216.226.216.0 0.0.0.255 host 206.103.4.37
+access-list 130 permit icmp 209.198.215.64 0.0.0.63 host 206.103.4.37
+access-list 130 deny   icmp any host 206.103.4.255
+access-list 130 deny   icmp any host 208.141.103.255
+access-list 130 deny   icmp any host 216.226.216.255
+access-list 130 deny   icmp any host 209.198.215.255
+access-list 130 deny   icmp any host 206.103.4.37
+access-list 130 deny   icmp any host 206.103.4.6
+access-list 130 deny   icmp any host 206.103.4.10
+access-list 130 deny   icmp any host 206.103.4.74
+access-list 130 deny   tcp any host 206.103.4.6 neq www
+access-list 130 deny   tcp any host 206.103.4.10 neq www
+access-list 130 deny   tcp any host 206.103.4.74 neq www
+access-list 130 permit ip any any
+access-list 150 deny   tcp any any neq www
+access-list 150 deny   tcp host 206.103.4.41 any
+access-list 150 deny   tcp host 209.198.215.66 any
+access-list 150 deny   tcp host 206.103.4.2 any
+access-list 150 deny   tcp host 209.198.215.65 any
+access-list 150 permit tcp any any
+access-list 160 permit tcp 216.226.216.0 0.0.0.255 any eq www
+access-list 160 permit tcp 208.141.103.0 0.0.0.255 any eq www
+access-list 160 deny   ip any any
+route-map policy permit 10
+!
+route-map proxy-redirect permit 100
+ match ip address 160
+ set ip next-hop 209.198.215.66 206.103.4.41
+!
+snmp-server community h0la RO
+snmp-server packetsize 4096
+snmp-server trap-authentication
+snmp-server enable traps isdn
+snmp-server enable traps frame-relay
+!
+line con 0
+line aux 0
+ transport input all
+line vty 0
+ password 7 1311051B1D090A3E24
+ login
+ length 25
+line vty 1 2
+ password 7 130747421F1556
+ login
+ length 25
+line vty 3 4
+ password 7 130747421F1556
+ login
+!
+end

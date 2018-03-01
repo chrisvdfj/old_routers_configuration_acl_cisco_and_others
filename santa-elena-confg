@@ -1,0 +1,143 @@
+
+!
+version 11.3
+service password-encryption
+!
+hostname Santa-Elena
+!
+enable secret 5 $1$yOoV$llfd0/PUk1JSaW2CfGYMR.
+enable password 7 110A160B19171F555D
+!
+ip subnet-zero
+ip name-server 206.48.128.133
+!
+interface Loopback1
+ description Red de Teknos
+ ip address 200.14.117.1 255.255.255.0
+!
+interface Ethernet0
+ description Conexion a backbone
+ ip address 206.48.128.14 255.255.255.0
+ ip route-cache same-interface
+ bandwidth 10000
+ fair-queue 64 256 0
+!
+interface Serial0
+ description Conexion con Teknos
+ ip unnumbered Ethernet0
+ encapsulation ppp
+ bandwidth 148
+ shutdown
+ clockrate 148000
+ dce-terminal-timing-enable
+!
+interface Serial1
+ description Frame Relay VTR, Fono:800-201070, 694-6297
+ ip address 206.48.159.1 255.255.255.192
+ encapsulation frame-relay
+ frame-relay lmi-type ansi
+!
+interface Serial2
+ description Conexion con Sisteco - Leon Valdes 239 8466
+ ip unnumbered Ethernet0
+ encapsulation ppp
+ bandwidth 64
+!
+interface Serial3
+ no ip address
+ no ip route-cache
+ no ip mroute-cache
+ shutdown
+!
+interface Serial4
+ no ip address
+ no ip route-cache
+ no ip mroute-cache
+ shutdown
+!
+interface Serial5
+ no ip address
+ no ip route-cache
+ no ip mroute-cache
+ shutdown
+!
+interface Serial6
+ no ip address
+ no ip route-cache
+ no ip mroute-cache
+ shutdown
+!
+interface Serial7
+ no ip address
+ no ip route-cache
+ no ip mroute-cache
+ shutdown
+!
+interface Serial8
+ no ip address
+ no ip route-cache
+ no ip mroute-cache
+ shutdown
+!
+interface Serial9
+ no ip address
+ no ip route-cache
+ no ip mroute-cache
+ shutdown
+!
+interface BRI0
+ no ip address
+ no ip route-cache
+ no ip mroute-cache
+ shutdown
+!
+router ospf 10502
+ redistribute connected subnets
+ redistribute static subnets
+ passive-interface Serial0
+ passive-interface Serial1
+ passive-interface Serial2
+ passive-interface Serial3
+ passive-interface Serial4
+ passive-interface Serial5
+ passive-interface Serial6
+ passive-interface Serial7
+ passive-interface Serial8
+ passive-interface Serial9
+ network 206.48.128.0 0.0.31.255 area 0.0.0.0
+ network 216.241.0.0 0.0.15.255 area 0.0.0.0
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 206.48.128.1
+ip route 10.10.10.0 255.255.255.0 206.48.159.2
+ip route 10.10.12.0 255.255.255.0 206.48.159.3
+ip route 200.14.117.0 255.255.255.0 Null0
+ip route 206.48.129.0 255.255.255.224 Serial2
+ip route 206.48.129.192 255.255.255.224 206.48.159.5
+ip route 206.48.129.224 255.255.255.224 206.48.159.4 151
+ip route 206.48.133.32 255.255.255.224 206.48.159.2
+ip route 206.48.133.64 255.255.255.224 206.48.159.3
+ip route 206.48.134.96 255.255.255.224 206.48.159.10
+ip route 206.48.136.0 255.255.255.224 206.48.159.6
+ip route 206.48.136.32 255.255.255.224 206.48.159.8
+ip route 206.48.136.64 255.255.255.224 206.48.159.9
+ip route 206.48.140.128 255.255.255.224 206.48.159.12
+ip route 206.48.142.192 255.255.255.224 206.48.159.11
+ip route 206.48.146.176 255.255.255.240 206.48.159.13
+ip route 206.48.147.0 255.255.255.0 206.48.159.2
+ip route 206.48.148.0 255.255.255.0 206.48.159.3
+ip route 206.48.159.7 255.255.255.255 206.48.159.6
+logging 209.198.213.2
+snmp-server community public RO
+snmp-server packetsize 4096
+snmp-server location Apoquindo 3000 Of. 602 - Santiago - Chile
+snmp-server contact Operaciones unete.com S.A. - F:3744570
+!
+line con 0
+line aux 0
+ transport input all
+line vty 0 4
+ password 7 14141D0502013E727D
+ login
+!
+end

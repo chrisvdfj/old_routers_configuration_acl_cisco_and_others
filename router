@@ -1,0 +1,66 @@
+Using 1934 out of 7506 bytes
+!
+version 12.0
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname MaxRouter
+!
+enable secret 5 $1$coJp$U70ul/Q7PKRXDkji2FcQG1
+enable password z1428
+!
+ip subnet-zero
+ip name-server 200.14.80.65
+ip name-server 200.14.80.72
+!
+!
+!
+interface Ethernet0
+ description WAN Interface
+ bandwidth 128
+ ip address 200.29.67.94 255.255.255.252
+ no ip directed-broadcast
+ ip nat outside
+!
+interface Ethernet1
+ description Intranet Interface
+ bandwidth 10000
+ ip address 192.168.168.1 255.255.255.0
+ no ip directed-broadcast
+ ip nat inside
+!
+ip nat pool maxmedia 200.29.67.161 200.29.67.161 netmask 255.255.255.240
+ip nat inside source list 1 pool maxmedia overload
+ip nat inside source static 192.168.168.123 200.29.67.170
+ip nat inside source static 192.168.168.2 200.29.67.169
+ip nat inside source static 192.168.168.7 200.29.67.163
+ip nat inside source static 192.168.168.4 200.29.67.164
+ip nat inside source static 192.168.168.3 200.29.67.167
+ip nat inside source static 192.168.168.5 200.29.67.162
+ip nat inside source static 192.168.168.21 200.29.67.166
+ip nat inside source static 192.168.168.6 200.29.67.165
+ip nat outside source static 192.168.168.123 200.29.67.170
+ip nat outside source static 192.168.168.2 200.29.67.169
+ip nat outside source static 192.168.168.7 200.29.67.163
+ip nat outside source static 192.168.168.4 200.29.67.164
+ip nat outside source static 192.168.168.3 200.29.67.167
+ip nat outside source static 192.168.168.5 200.29.67.162
+ip nat outside source static 192.168.168.21 200.29.67.166
+ip nat outside source static 192.168.168.6 200.29.67.165
+ip classless
+ip route 0.0.0.0 0.0.0.0 200.29.67.93
+!
+access-list 1 permit 192.168.168.0 0.0.0.255
+snmp-server community public RO
+snmp-server location Agusto Leguia Sur 160, Las Condes, Santiago
+snmp-server contact Maxmedia S.A. Fono: 3813636
+!
+line con 0
+ transport input none
+line vty 0 4
+ password z1428z
+ login
+!
+end
+                

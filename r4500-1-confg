@@ -1,0 +1,253 @@
+
+!
+version 11.1
+service slave-log
+no service udp-small-servers
+no service tcp-small-servers
+!
+hostname r4500-1
+!
+clock timezone UTC 7
+enable secret 5 $1$Q8Eb$TdzxrwY5DovgkRArpnjds.
+enable password connet99
+!
+ip subnet-zero
+!
+interface Serial0
+ no ip address
+ shutdown
+!
+interface Serial1
+ no ip address
+ shutdown
+!
+interface Serial2
+ description Enlace Internacional GlobalOne
+ ip address 206.49.216.50 255.255.255.252
+ ip access-group 103 in
+ ip access-group 3 out
+ no ip directed-broadcast
+ bandwidth 2048
+!
+interface Serial3
+ no ip address
+ shutdown
+!
+interface FastEthernet0
+ description Conexion a Backbone Interaccess 100 Mbps
+ ip address 216.241.0.1 255.255.255.0 secondary
+ ip address 209.198.213.1 255.255.255.0 secondary
+ ip address 206.48.128.1 255.255.255.0
+ bandwidth 100000
+ full-duplex
+!
+router ospf 10502
+ redistribute connected subnets
+ redistribute static subnets
+ passive-interface Serial0
+ passive-interface Serial1
+ passive-interface Serial3
+ network 206.48.128.0 0.0.31.255 area 0.0.0.0
+ network 216.241.0.0 0.0.15.255 area 0.0.0.0
+!
+router bgp 10502
+!
+ip name-server 206.48.128.133
+ip classless
+ip route 0.0.0.0 0.0.0.0 206.49.216.49
+ip route 10.10.11.0 255.255.255.0 206.48.128.5
+ip route 10.158.8.0 255.255.255.0 206.48.128.205
+ip route 196.40.18.0 255.255.255.0 206.48.128.18
+ip route 204.198.128.102 255.255.255.255 205.48.128.18
+ip route 206.49.216.108 255.255.255.252 206.48.128.12
+ip route 209.88.207.131 255.255.255.255 Serial2
+ip route 216.241.0.0 255.255.240.0 Null0
+ip route 216.241.10.0 255.255.254.0 206.48.128.10
+ip route 216.241.12.0 255.255.255.0 206.48.128.5
+ip route 216.241.13.0 255.255.255.0 206.48.128.5
+ip as-path access-list 10 permit ^$
+ip as-path access-list 11 permit ^$
+logging console emergencies
+logging trap alerts
+logging 206.48.128.155
+access-list 3 deny   206.48.133.0 0.0.0.255
+access-list 3 permit 206.48.128.0 0.0.31.255
+access-list 3 permit 216.241.0.0 0.0.15.255
+access-list 3 permit 209.198.213.0 0.0.0.255
+access-list 3 permit 206.103.4.0 0.0.0.255
+access-list 3 permit 208.141.103.0 0.0.0.255
+access-list 3 deny   any
+access-list 10 permit 146.83.0.0 0.0.255.255
+access-list 10 permit 152.74.0.0 0.0.255.255
+access-list 10 permit 156.97.0.0 0.0.255.255
+access-list 10 permit 158.251.0.0 0.0.255.255
+access-list 10 permit 161.25.0.0 0.0.255.255
+access-list 10 permit 161.131.0.0 0.0.255.255
+access-list 10 permit 161.238.0.0 0.0.255.255
+access-list 10 permit 163.247.0.0 0.0.255.255
+access-list 10 permit 163.250.0.0 0.0.255.255
+access-list 10 permit 164.96.0.0 0.0.255.255
+access-list 10 permit 165.182.0.0 0.0.255.255
+access-list 10 permit 165.183.0.0 0.0.255.255
+access-list 10 permit 166.75.0.0 0.0.255.255
+access-list 10 permit 166.110.0.0 0.0.255.255
+access-list 10 permit 170.18.0.0 0.0.255.255
+access-list 10 permit 192.80.24.0 0.0.0.255
+access-list 10 permit 192.207.146.0 0.0.0.255
+access-list 10 permit 192.231.140.0 0.0.0.255
+access-list 10 permit 198.22.250.0 0.0.0.255
+access-list 10 permit 199.186.25.0 0.0.0.255
+access-list 10 permit 199.186.26.0 0.0.1.255
+access-list 10 permit 199.186.28.0 0.0.3.255
+access-list 10 permit 199.186.32.0 0.0.1.255
+access-list 10 permit 199.186.34.0 0.0.0.255
+access-list 10 permit 200.0.115.0 0.0.0.255
+access-list 10 permit 200.0.116.0 0.0.1.255
+access-list 10 permit 200.0.140.0 0.0.1.255
+access-list 10 permit 200.0.144.0 0.0.1.255
+access-list 10 permit 200.0.152.0 0.0.0.255
+access-list 10 permit 200.0.153.0 0.0.0.255
+access-list 10 permit 200.1.16.0 0.0.15.255
+access-list 10 permit 200.1.129.0 0.0.0.255
+access-list 10 permit 200.1.131.0 0.0.0.255
+access-list 10 permit 200.2.88.0 0.0.1.255
+access-list 10 permit 200.2.92.0 0.0.3.255
+access-list 10 permit 200.2.112.0 0.0.7.255
+access-list 10 permit 200.9.97.0 0.0.0.255
+access-list 10 permit 200.9.98.0 0.0.1.255
+access-list 10 permit 200.9.100.0 0.0.0.255
+access-list 10 permit 200.9.111.0 0.0.0.255
+access-list 10 permit 200.9.128.0 0.0.0.255
+access-list 10 permit 200.9.142.0 0.0.0.255
+access-list 10 permit 200.9.201.0 0.0.0.255
+access-list 10 permit 200.9.215.0 0.0.0.255
+access-list 10 permit 200.9.225.0 0.0.0.255
+access-list 10 permit 200.10.16.0 0.0.7.255
+access-list 10 permit 200.10.24.0 0.0.3.255
+access-list 10 permit 200.10.182.0 0.0.0.255
+access-list 10 permit 200.10.220.0 0.0.3.255
+access-list 10 permit 200.10.224.0 0.0.1.255
+access-list 10 permit 200.10.226.0 0.0.0.255
+access-list 10 permit 200.10.234.0 0.0.0.255
+access-list 10 permit 200.10.236.0 0.0.1.255
+access-list 10 permit 200.10.242.0 0.0.0.255
+access-list 10 permit 200.10.251.0 0.0.0.255
+access-list 10 permit 200.10.252.0 0.0.0.255
+access-list 10 permit 200.10.255.0 0.0.0.255
+access-list 10 permit 200.12.130.0 0.0.0.255
+access-list 10 permit 200.12.140.0 0.0.1.255
+access-list 10 permit 200.13.0.0 0.0.7.255
+access-list 10 permit 200.14.64.0 0.0.0.255
+access-list 10 permit 200.14.65.0 0.0.0.255
+access-list 10 permit 200.14.68.0 0.0.3.255
+access-list 10 permit 200.14.92.0 0.0.0.255
+access-list 10 permit 200.14.93.0 0.0.0.255
+access-list 10 permit 200.14.94.0 0.0.0.255
+access-list 10 permit 200.14.95.0 0.0.0.255
+access-list 10 permit 200.14.97.0 0.0.0.255
+access-list 10 permit 200.14.100.0 0.0.3.255
+access-list 10 permit 200.14.105.0 0.0.0.255
+access-list 10 permit 200.14.108.0 0.0.1.255
+access-list 10 permit 200.14.117.0 0.0.0.255
+access-list 10 permit 200.14.155.0 0.0.0.255
+access-list 10 permit 200.14.229.0 0.0.0.255
+access-list 10 permit 200.14.230.0 0.0.0.255
+access-list 10 permit 200.14.247.0 0.0.0.255
+access-list 10 permit 200.28.0.0 0.0.255.255
+access-list 10 permit 200.29.32.0 0.0.31.255
+access-list 10 permit 204.87.169.0 0.0.0.255
+access-list 10 permit 206.34.128.0 0.0.15.255
+access-list 11 permit 206.48.128.0 0.0.31.255
+access-list 11 permit 209.198.213.0 0.0.0.255
+access-list 11 permit 209.88.204.0 0.0.0.128
+access-list 103 deny   ip 206.48.128.0 0.0.31.255 any
+access-list 103 deny   ip any host 206.48.128.255
+access-list 103 permit icmp any any
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq domain
+access-list 103 permit udp any 206.48.128.0 0.0.0.255 eq domain
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq www
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq ftp-data
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq ftp
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq bgp
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq smtp
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq pop3
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq nntp
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq 554
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq 7070
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq 3030
+access-list 103 permit udp any 206.48.128.0 0.0.0.255 eq 3030
+access-list 103 permit udp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 103 permit tcp 12.21.51.0 0.0.0.255 206.48.128.0 0.0.0.255 eq telnet
+access-list 103 permit tcp any 206.48.128.0 0.0.0.255 eq 22
+access-list 103 permit udp any 206.48.128.0 0.0.31.255 eq snmp
+access-list 103 permit ip 209.198.222.0 0.0.0.254 206.48.128.0 0.0.0.255
+access-list 103 permit ip 209.198.223.0 0.0.0.254 206.48.128.0 0.0.0.255
+access-list 103 permit udp any host 206.48.128.207 eq 1645
+access-list 103 permit udp any host 206.48.128.207 eq 1646
+access-list 103 deny   tcp any 206.48.128.0 0.0.0.255 eq 1433
+access-list 103 deny   udp any 206.48.128.0 0.0.0.255 eq 1433
+access-list 103 deny   ip any 206.48.128.0 0.0.0.255
+access-list 103 permit ip any any
+access-list 110 deny   ip 206.48.128.0 0.0.0.255 any
+access-list 110 permit icmp any any
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 eq domain
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq domain
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq www
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq ftp-data
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq ftp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq smtp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq pop3
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq nntp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 554
+access-list 110 permit ip 209.198.223.0 0.0.0.255 host 206.48.128.2
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 9999
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 110 deny   udp any 206.48.128.0 0.0.0.255 eq 1433
+access-list 110 deny   udp any 206.48.128.0 0.0.0.255 eq 1645
+access-list 110 deny   udp any 206.48.128.0 0.0.0.255 eq 1646
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 110 permit ip any host 206.48.128.4
+access-list 110 deny   ip any 206.48.128.0 0.0.0.255
+access-list 110 permit ip any any
+access-list 111 deny   ip 206.48.128.0 0.0.0.255 any
+access-list 111 permit icmp any any
+access-list 111 permit udp any 206.48.128.0 0.0.0.255 eq domain
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 eq domain
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 eq www
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 eq ftp-data
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 eq ftp
+access-list 111 deny   tcp any host 206.48.128.153 eq smtp
+access-list 111 permit ip 209.85.32.0 0.0.0.255 host 206.48.128.2
+access-list 111 permit ip 209.198.222.0 0.0.0.255 host 206.48.128.2
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 eq smtp
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 eq pop3
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 eq nntp
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 eq 554
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 eq 9999
+access-list 111 permit tcp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 111 deny   udp any 206.48.128.0 0.0.0.255 eq 1433
+access-list 111 deny   udp any 206.48.128.0 0.0.0.255 eq 1645
+access-list 111 deny   udp any 206.48.128.0 0.0.0.255 eq 1646
+access-list 111 permit udp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 111 permit ip any host 206.48.128.4
+access-list 111 deny   ip any 206.48.128.0 0.0.0.255
+access-list 111 permit ip any any
+snmp-server community public RO
+snmp-server location Apoquindo 3000, og 602 - Santiago
+snmp-server contact Unete.com S.A. Fono: 3744500
+!
+line con 0
+line aux 0
+line vty 0 1
+ password connet99
+ login
+line vty 2
+ exec-timeout 2 0
+ password connet99
+ login
+line vty 3 4
+ password connet99
+ login
+!
+end

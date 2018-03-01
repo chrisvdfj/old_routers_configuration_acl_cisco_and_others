@@ -1,0 +1,90 @@
+[root@chris root]# telnet 128.1.128.53 23
+Trying 128.1.128.53...
+Connected to lantastic.orsancheq.cl (128.1.128.53).
+Escape character is '^]'.
+
+
+User Access Verification
+
+Password:
+orsancheq>en
+Password:
+orsancheq#sh conf
+Using 1088 out of 7506 bytes
+!
+version 12.0
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname orsancheq
+!
+!
+ip subnet-zero
+ip name-server 204.231.180.3
+!
+!
+!
+interface Ethernet0
+ ip address 128.1.128.53 255.255.0.0
+ no ip directed-broadcast
+ ip nat inside
+!
+interface Ethernet1
+ ip address 192.168.2.2 255.255.255.252 secondary
+ ip address 204.231.179.33 255.255.255.240
+ no ip directed-broadcast
+ ip nat outside
+!
+ip nat pool orsancheq 204.231.179.34 204.231.179.34 netmask 255.255.255.240
+ip nat inside source list 1 pool orsancheq overload
+ip nat inside source static 128.1.128.73 204.231.179.37
+ip classless
+ip route 0.0.0.0 0.0.0.0 192.168.2.1
+ip route 192.168.2.0 255.255.255.252 Ethernet1
+ip route 204.231.179.38 255.255.255.255 Ethernet0
+!
+access-list 1 permit 128.1.0.0 0.0.255.255
+snmp-server community public RO
+snmp-server location Huerfanos 886 Of. 1209, Santiago, Chile
+snmp-server contact Orsancheq, Fono: 3818763
+!
+line con 0
+ password lala
+ transport input none
+ escape-character 27
+line vty 0 4
+ password lala
+ login
+ escape-character 27
+!
+end
+
+orsancheq#sh ver
+Cisco Internetwork Operating System Software
+IOS (tm) 1600 Software (C1600-Y-M), Version 12.0(17a), RELEASE SOFTWARE (fc1)
+Copyright (c) 1986-2002 by cisco Systems, Inc.
+Compiled Sun 10-Feb-02 23:08 by kellythw
+Image text-base: 0x02005000, data-base: 0x02460138
+
+ROM: System Bootstrap, Version 12.0(3)T, RELEASE SOFTWARE (fc1)
+ROM: 1600 Software (C1600-RBOOT-R), Version 12.0(3)T,  RELEASE SOFTWARE (fc1)
+
+orsancheq uptime is 1 hour, 24 minutes
+System restarted by power-on
+System image file is "flash:c1600-y-mz.120-17a.bin"
+
+cisco 1605 (68360) processor (revision C) with 6144K/2048K bytes of memory.
+Processor board ID 28016334, with hardware revision 00000004
+Bridging software.
+X.25 software, Version 3.0.0.
+2 Ethernet/IEEE 802.3 interface(s)
+System/IO memory with parity disabled
+8192K bytes of DRAM onboard
+System running from RAM
+7K bytes of non-volatile configuration memory.
+4096K bytes of processor board PCMCIA flash (Read/Write)
+
+Configuration register is 0x2102
+
+orsancheq#

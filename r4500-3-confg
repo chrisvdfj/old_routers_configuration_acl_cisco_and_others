@@ -1,0 +1,237 @@
+
+!
+version 11.1
+service slave-log
+no service udp-small-servers
+no service tcp-small-servers
+!
+hostname r4500-3
+!
+enable secret 5 $1$elxc$f5YpbnlsPTt6Eegfviorw1
+enable password connet99
+!
+ip subnet-zero
+frame-relay switching
+!
+interface Ethernet0
+ description Enlace NAP CTC-MUNDO - 10 Mbps
+ ip address 200.10.224.42 255.255.255.252
+ ip access-group 110 in
+ ip access-group 3 out
+ no ip directed-broadcast
+ bandwidth 10000
+ media-type 10BaseT
+!
+interface Ethernet1
+ description Conexion a Red de Telehousing 206.48.132.0
+ ip address 206.48.142.129 255.255.255.192 secondary
+ ip address 206.48.132.1 255.255.255.0
+ media-type 10BaseT
+!
+interface Serial0
+ description MALA
+ ip address 192.168.102.102 255.255.255.252
+ ip access-group 110 in
+ no ip directed-broadcast
+ bandwidth 2048
+ shutdown
+!
+interface Serial1
+ description MALA
+ no ip address
+ ip access-group 110 in
+ no ip directed-broadcast
+ bandwidth 2048
+ shutdown
+!
+interface Serial2
+ description Conexion a Terra Networks 2901687 - 2901684 - 3306983
+ ip address 200.28.8.26 255.255.255.252
+ ip access-group 110 in
+ no ip directed-broadcast
+ bandwidth 2048
+!
+interface Serial3
+ no ip address
+ encapsulation frame-relay IETF
+ bandwidth 2048
+ frame-relay lmi-type q933a
+ frame-relay intf-type dce
+!
+interface Serial3.1 point-to-point
+ description Conexion a Infovia
+ ip unnumbered FastEthernet0
+ no ip mroute-cache
+ frame-relay interface-dlci 17   
+!
+interface FastEthernet0
+ description Conexion a Backbone
+ ip address 216.241.0.2 255.255.240.0 secondary
+ ip address 206.103.4.3 255.255.255.0 secondary
+ ip address 200.41.243.1 255.255.255.0 secondary
+ ip address 206.48.128.3 255.255.255.0
+ bandwidth 100000
+ full-duplex
+!
+router ospf 10502
+ redistribute connected subnets
+ redistribute static subnets
+ redistribute bgp 10502 metric 120 subnets
+ passive-interface Ethernet0
+ passive-interface Ethernet1
+ passive-interface Serial0
+ passive-interface Serial1
+ passive-interface Serial2
+ passive-interface Serial3
+ passive-interface Serial3.1
+ network 206.48.128.0 0.0.31.255 area 0.0.0.0
+!
+router bgp 10502
+ network 209.198.213.0
+ network 206.48.128.0 mask 255.255.224.0
+ network 206.103.4.0
+ network 216.241.0.0 mask 255.255.240.0
+ network 208.141.103.0
+ network 204.254.85.32 mask 255.255.255.248
+ network 200.41.243.0
+ aggregate-address 206.48.128.0 255.255.224.0 summary-only
+ aggregate-address 216.241.0.0 255.255.240.0 summary-only
+ redistribute connected
+ redistribute static
+ neighbor entel peer-group
+ neighbor entel remote-as 6471
+ neighbor entel distribute-list 10 out
+ neighbor CTC-Mundo peer-group
+ neighbor CTC-Mundo remote-as 7004
+ neighbor CTC-Mundo distribute-list 10 out
+ neighbor 192.168.102.101 peer-group entel
+ neighbor 200.10.224.41 peer-group CTC-Mundo
+ neighbor 200.28.8.25 remote-as 7418
+ neighbor 200.28.8.25 filter-list 1 in
+ neighbor 200.28.8.25 filter-list 2 out
+ no auto-summary
+!
+ip name-server 206.48.128.133
+ip classless
+ip route 0.0.0.0 0.0.0.0 200.10.224.41
+ip route 10.10.100.0 255.255.255.0 206.48.149.1
+ip route 172.16.0.0 255.255.0.0 Serial3.1
+ip route 172.16.198.1 255.255.255.255 Serial3.1
+ip route 192.168.200.0 255.255.255.252 206.48.128.16
+ip route 200.12.17.0 255.255.255.0 Ethernet0
+ip route 200.14.117.0 255.255.255.0 Null0
+ip route 200.27.99.0 255.255.255.0 192.168.173.7
+ip route 200.41.243.0 255.255.255.0 Serial3.1
+ip route 206.48.128.0 255.255.224.0 Null0
+ip route 206.48.132.32 255.255.255.255 206.48.149.1
+ip route 206.48.133.0 255.255.255.224 206.48.128.5
+ip route 206.48.133.32 255.255.255.224 206.48.147.2
+ip route 206.48.133.64 255.255.255.224 206.48.148.2
+ip route 206.48.133.96 255.255.255.224 206.48.128.2
+ip route 206.48.133.128 255.255.255.224 206.48.128.11
+ip route 206.48.134.128 255.255.255.240 206.48.128.11
+ip route 206.48.143.128 255.255.255.128 206.48.128.13
+ip route 206.48.146.0 255.255.255.240 206.48.128.11
+ip route 206.48.149.0 255.255.255.248 206.48.128.16
+ip route 206.48.154.0 255.255.255.0 206.48.128.16
+ip route 206.48.156.48 255.255.255.240 206.48.128.16
+ip route 206.48.159.7 255.255.255.255 206.48.159.6
+ip route 206.49.216.5 255.255.255.255 206.48.128.12
+ip route 208.141.103.0 255.255.255.0 Serial3.1 permanent
+ip route 216.241.7.0 255.255.255.0 206.48.128.2
+ip route 216.241.8.0 255.255.255.0 206.48.128.2
+ip route 216.241.9.0 255.255.255.128 206.48.128.7
+ip route 216.241.9.128 255.255.255.128 206.48.128.15
+ip route 216.241.14.0 255.255.255.128 206.48.128.11
+ip route 216.241.14.128 255.255.255.128 206.48.128.6
+ip route 216.241.15.0 255.255.255.0 Serial3.1
+ip as-path access-list 1 permit 11340
+ip as-path access-list 1 permit 7418
+ip as-path access-list 1 deny .*
+ip as-path access-list 2 permit ^$
+ip as-path access-list 2 deny .*
+ip as-path access-list 10 permit ^$
+logging console alerts
+logging trap alerts
+logging 206.48.128.155
+access-list 1 deny   10.0.0.0 0.255.255.255
+access-list 1 deny   206.48.128.0 0.0.31.255
+access-list 1 deny   192.168.0.0 0.0.255.255
+access-list 1 deny   209.88.204.0 0.0.0.129
+access-list 1 deny   206.49.216.0 0.0.0.255
+access-list 1 deny   209.198.213.0 0.0.0.255
+access-list 1 deny   208.130.4.0 0.0.1.255
+access-list 1 deny   209.85.25.0 0.0.0.255
+access-list 1 deny   209.88.106.0 0.0.1.255
+access-list 1 deny   209.88.108.0 0.0.0.255
+access-list 1 deny   209.198.211.0 0.0.0.255
+access-list 1 deny   209.198.212.0 0.0.0.255
+access-list 1 deny   209.198.214.0 0.0.0.255
+access-list 1 deny   206.24.11.0 0.0.0.255
+access-list 1 deny   206.26.146.0 0.0.1.255
+access-list 1 deny   200.30.32.0 0.0.3.255
+access-list 1 deny   200.30.46.0 0.0.0.255
+access-list 1 deny   200.30.60.0 0.0.3.255
+access-list 1 deny   200.2.98.0 0.0.0.255
+access-list 1 deny   200.14.99.0 0.0.0.255
+access-list 1 deny   200.32.72.0 0.0.3.255
+access-list 1 deny   200.32.76.0 0.0.0.255
+access-list 1 deny   200.41.8.0 0.0.0.255
+access-list 1 deny   200.41.52.0 0.0.0.255
+access-list 1 deny   206.49.220.0 0.0.0.255
+access-list 1 deny   206.49.221.0 0.0.0.255
+access-list 1 deny   216.72.12.0 0.0.3.255
+access-list 1 permit any
+access-list 3 deny   206.48.133.0 0.0.0.255
+access-list 3 permit 206.48.128.0 0.0.31.255
+access-list 3 permit 216.241.0.0 0.0.15.255
+access-list 3 permit 209.198.213.0 0.0.0.255
+access-list 3 permit 206.103.4.0 0.0.0.255
+access-list 3 permit 208.141.103.0 0.0.0.255
+access-list 3 deny   any
+access-list 10 permit 206.48.128.0 0.0.31.255
+access-list 10 permit 209.198.213.0 0.0.0.255
+access-list 10 permit 209.198.215.160 0.0.0.31
+access-list 10 permit 209.88.204.0 0.0.0.255
+access-list 10 permit 206.103.4.0 0.0.0.255
+access-list 10 permit 208.141.103.0 0.0.0.255
+access-list 10 permit 216.241.0.0 0.0.15.255
+access-list 10 permit 200.30.60.64 0.0.0.15
+access-list 10 permit 200.41.243.0 0.0.0.255
+access-list 11 permit 206.48.128.0 0.0.31.255
+access-list 110 deny   ip 206.48.128.0 0.0.31.255 any
+access-list 110 permit icmp any any
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 eq domain
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq domain
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq www
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq ftp-data
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq ftp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq bgp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq smtp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq pop3
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq nntp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 9999
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 554
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 7070
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 8080
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 eq 554
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 eq 7070
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 eq 8080
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 110 deny   udp any 206.48.128.0 0.0.0.255 eq 1433
+access-list 110 deny   tcp any 206.48.128.0 0.0.0.255 eq 1433
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 110 deny   ip any 206.48.128.0 0.0.0.255
+access-list 110 permit ip any any
+snmp-server community public RO
+snmp-server location Apoquindo 3000 of 602, Santiago - Chile
+snmp-server contact Unete.com S.A. Chile- Fono: 3744500
+!
+line con 0
+line aux 0
+ transport input all
+line vty 0 4
+ password connet99
+ login
+!
+end

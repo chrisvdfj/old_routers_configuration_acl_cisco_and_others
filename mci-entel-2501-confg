@@ -1,0 +1,104 @@
+
+!
+version 10.3
+no service tcp-small-servers
+!
+hostname MCI-ENTEL-2501
+!
+enable secret 5 $1$YDA2$2dx4uDZRRMdxoHm3deH2G1
+enable password connet99
+!
+ip subnet-zero
+!
+interface Ethernet0
+ description Conexion con Backbone Unete.com S.A. - Chile
+ ip address 206.103.4.37 255.255.255.0 secondary
+ ip address 206.103.4.1 255.255.255.0 secondary
+ ip address 206.48.128.18 255.255.255.0
+ bandwidth 10000
+!
+interface Serial0
+ description Conexion a Entel-Internet - F: 3603636
+ ip address 192.168.102.102 255.255.255.252
+ ip access-group 110 in
+ bandwidth 2048
+!
+interface Serial1
+ description Conexion a MCI
+ ip address 204.70.44.78 255.255.255.252
+ ip access-group 110 in
+ ip access-group 3 out
+ no ip unreachables
+ bandwidth 256
+!
+router ospf 10502
+ redistribute connected subnets
+ redistribute static subnets
+ redistribute bgp 10502
+ passive-interface Serial0
+ passive-interface Serial1
+ network 206.48.128.0 0.0.31.255 area 0.0.0.0
+!
+router bgp 10502
+ redistribute connected
+ redistribute static
+ network 209.198.213.0
+ network 206.48.128.0 mask 255.255.224.0
+ network 206.103.4.0
+ network 216.241.0.0 mask 255.255.240.0
+ network 208.141.103.0
+ network 200.41.243.0
+ neighbor entel peer-group
+ neighbor entel remote-as 6471
+ neighbor entel distribute-list 10 out
+ neighbor 192.168.102.101 peer-group entel
+ aggregate-address 206.48.128.0 255.255.224.0 summary-only
+ aggregate-address 216.241.0.0 255.255.240.0 summary-only
+!
+ip name-server 206.48.128.133
+ip classless
+ip route 0.0.0.0 0.0.0.0 206.48.128.3
+logging 209.198.213.2
+access-list 3 permit 206.48.128.0 0.0.31.255
+access-list 3 permit 216.241.0.0 0.0.15.255
+access-list 3 permit 206.103.4.0 0.0.0.255
+access-list 3 permit 209.198.213.0 0.0.0.255
+access-list 3 permit 209.198.215.0 0.0.0.255
+access-list 3 permit 208.141.103.0 0.0.0.255
+access-list 3 permit 209.88.204.0 0.0.0.255
+access-list 3 deny   any
+access-list 110 deny   ip 206.48.128.0 0.0.31.255 any
+access-list 110 permit icmp any any
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 eq domain
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq domain
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq www
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq ftp-data
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq ftp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq bgp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq smtp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq pop3
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq nntp
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 9999
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 554
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 7070
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 eq 8080
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 eq 554
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 eq 7070
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 eq 8080
+access-list 110 permit tcp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 110 deny   udp any 206.48.128.0 0.0.0.255 eq 1433
+access-list 110 deny   tcp any 206.48.128.0 0.0.0.255 eq 1433
+access-list 110 permit udp any 206.48.128.0 0.0.0.255 gt 1023
+access-list 110 deny   ip any 206.48.128.0 0.0.0.255
+access-list 110 permit ip any any
+snmp-server community public RO
+snmp-server location Apoquindo 3000, Of.602 - Las Condes - Santiago - Chile
+snmp-server contact "Operaciones Unete.com Chile - Fono 374 4500
+!
+line con 0
+line aux 0
+line vty 0 4
+ password connet99
+ login
+!
+end

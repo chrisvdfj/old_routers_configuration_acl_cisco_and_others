@@ -1,0 +1,62 @@
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname info_garantizados
+!
+logging buffered 50000 debugging
+enable password infonet
+!
+ip subnet-zero
+ip name-server 204.231.180.3
+!
+!
+!
+interface Loopback0
+ ip address 204.231.179.33 255.255.255.240
+ no ip directed-broadcast
+!
+interface Loopback1
+ no ip address
+ no ip directed-broadcast
+!
+interface Ethernet0
+ ip address 172.18.10.1 255.255.255.0
+ no ip directed-broadcast
+ ip nat inside
+!
+interface Ethernet1
+ ip address 192.168.2.2 255.255.255.252
+ no ip directed-broadcast
+ ip nat outside
+!
+ip nat inside source list 1 interface Loopback0 overload
+ip nat inside source static 172.18.10.23 204.231.179.47
+ip nat inside source static 172.18.10.22 204.231.179.46
+ip nat inside source static 172.18.10.21 204.231.179.45
+ip nat inside source static 172.18.10.20 204.231.179.44
+ip nat inside source static 172.18.10.19 204.231.179.43
+ip nat inside source static 172.18.10.18 204.231.179.42
+ip nat inside source static 172.18.10.17 204.231.179.41
+ip nat inside source static 172.18.10.13 204.231.179.37
+ip nat inside source static 172.18.10.12 204.231.179.36
+ip nat inside source static 172.18.10.11 204.231.179.35
+ip nat inside source static 172.18.10.10 204.231.179.34
+ip classless
+ip route 0.0.0.0 0.0.0.0 192.168.2.1
+ip route 192.168.2.0 255.255.255.252 Ethernet1
+!
+logging trap errors
+access-list 1 permit 172.18.10.0 0.0.0.255
+!
+line con 0
+ password infonet
+ login
+ transport input none
+ escape-character 27
+line vty 0 4
+ password infonet
+ login
+ escape-character 27
+!
+end
